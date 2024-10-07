@@ -1,0 +1,6 @@
+@SWP.KitStem.API_HostAddress = http://localhost:5186
+
+GET {{SWP.KitStem.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
