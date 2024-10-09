@@ -40,7 +40,7 @@ namespace SWP.KitStem.API
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
             });
-            
+
             //builder.Services.AddDbContext<KitStemContext>(options =>
             //    options.UseSqlServer(connectionString,
             //        sqlOptions => sqlOptions.MigrationsAssembly("SWP.KitStem.Repository")));
@@ -48,6 +48,7 @@ namespace SWP.KitStem.API
             //    option.AddPolicy("CORS", builder =>
             //        builder.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin()));
 
+            builder.Services.AddScoped<Order>();
             builder.Services.AddScoped<CartService>();
             builder.Services.AddScoped<LabService>();
             builder.Services.AddScoped<KitService>();
