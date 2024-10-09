@@ -48,6 +48,7 @@ namespace SWP.KitStem.API
             //    option.AddPolicy("CORS", builder =>
             //        builder.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin()));
 
+            builder.Services.AddScoped<CartService>();
             builder.Services.AddScoped<LabService>();
             builder.Services.AddScoped<KitService>();
             builder.Services.AddScoped<CategoryService>();
