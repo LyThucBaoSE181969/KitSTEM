@@ -1,8 +1,12 @@
 
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using SWP.KitStem.Repository;
 using SWP.KitStem.Repository.Models;
 using SWP.KitStem.Service.Services;
+using SWP.KitStem.API.Data;
 
 namespace SWP.KitStem.API
 {
@@ -12,6 +16,7 @@ namespace SWP.KitStem.API
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            var configuration = builder.Configuration;
             // Add services to the container.
 
             builder.Services.AddControllers();
@@ -21,7 +26,21 @@ namespace SWP.KitStem.API
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
             builder.Services.AddDbContext<KitStemContext>(options =>
-            options.UseSqlServer(connectionString));
+                options.UseSqlServer(connectionString));
+            builder.Services.AddDbContext<DataContext>(options =>
+                options.UseSqlServer(connectionString));
+
+            builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<KitStemContext>()
+                .AddDefaultTokenProviders();
+
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            });
+            
             //builder.Services.AddDbContext<KitStemContext>(options =>
             //    options.UseSqlServer(connectionString,
             //        sqlOptions => sqlOptions.MigrationsAssembly("SWP.KitStem.Repository")));
@@ -42,6 +61,8 @@ namespace SWP.KitStem.API
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+
 
             app.UseHttpsRedirection();
 

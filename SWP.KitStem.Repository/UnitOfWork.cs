@@ -13,12 +13,24 @@ public class UnitOfWork : IDisposable
     private GenericRepository<Category> _categories;
     private GenericRepository<Kit> _kits;
     private GenericRepository<Lab> _lab;
+    private GenericRepository<Cart> _cart;
 
     public UnitOfWork(KitStemContext context)
     {
         _context = context;
     }
 
+    public GenericRepository<Cart> Carts
+    {
+        get
+        {
+            if (this._cart == null)
+            {
+                this._cart = new GenericRepository<Cart>(_context);
+            }
+            return _cart;
+        }
+    }
     public GenericRepository<Lab> Labs
     {
         get

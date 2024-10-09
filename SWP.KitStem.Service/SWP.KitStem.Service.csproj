@@ -23,4 +23,8 @@
     <ProjectReference Include="..\SWP.KitStem.Repository\SWP.KitStem.Repository.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="BusinessModels\Authentication\Login\" />
+  </ItemGroup>
+
 </Project>
