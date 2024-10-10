@@ -1,4 +1,5 @@
-﻿using SWP.KitStem.Repository.Models;
+﻿using SWP.KitStem.API.Data;
+using SWP.KitStem.Repository.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,25 +10,25 @@ namespace SWP.KitStem.Repository;
 
 public class UnitOfWork : IDisposable
 {
-    private KitStemContext _context;
-    private GenericRepository<Category> _categories;
+    private DataContext _context;
+    private GenericRepository<KitsCategory> _categories;
     private GenericRepository<Kit> _kits;
     private GenericRepository<Lab> _lab;
     private GenericRepository<Cart> _cart;     
-    private GenericRepository<Order> _order;
+    private GenericRepository<UserOrders> _order;
                                                 
-    public UnitOfWork(KitStemContext context)
+    public UnitOfWork(DataContext context)
     {
         _context = context;
     }
 
-    public GenericRepository<Order> Orders
+    public GenericRepository<UserOrders> Orders
     {
         get
         {
             if (this._order == null)
             {
-                this._order = new GenericRepository<Order>(_context);
+                this._order = new GenericRepository<UserOrders>(_context);
             }
             return _order;
         }
@@ -66,13 +67,13 @@ public class UnitOfWork : IDisposable
             return _kits;
         }
     }
-    public GenericRepository<Category> Categories
+    public GenericRepository<KitsCategory> Categories
     {
         get
         {
             if (this._categories == null)
             {
-                this._categories = new GenericRepository<Category>(_context);
+                this._categories = new GenericRepository<KitsCategory>(_context);
             }
             return _categories;
         }

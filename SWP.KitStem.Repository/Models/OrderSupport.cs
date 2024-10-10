@@ -1,25 +1,38 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace SWP.KitStem.Repository.Models;
-
-public partial class OrderSupport
+namespace SWP.KitStem.Repository.Models
 {
-    public Guid Id { get; set; }
+    [PrimaryKey("LabId")]
+    [Table("OrderSupport")]
+    public class OrderSupport
+    {
+        [Key]
+        public Guid Id { get; set; }
+        public Guid LabId { get; set; }
+        public Guid OrderId { get; set; }
+        public int PackageId { get; set; }
 
-    public Guid LabId { get; set; }
+        public int RemainSupportTimes { get; set; }
 
-    public Guid OrderId { get; set; }
+        [ForeignKey("LabId")]
+        [InverseProperty("OrderSupports")]
+        public virtual Lab Lab { get; set; } = null!;
 
-    public int PackageId { get; set; }
+        [ForeignKey("OrderId")]
+        [InverseProperty("OrderSupports")]
+        public virtual UserOrders Order { get; set; } = null!;
 
-    public int RemainSupportTimes { get; set; }
+        [ForeignKey("PackageId")]
+        public virtual Package Package { get; set; } = null!;
 
-    public virtual Lab Lab { get; set; } = null!;
-
-    public virtual ICollection<LabSupport> LabSupports { get; set; } = new List<LabSupport>();
-
-    public virtual Order Order { get; set; } = null!;
-
-    public virtual Package Package { get; set; } = null!;
+        [InverseProperty("OrderSupport")]
+        public virtual ICollection<LabSupport> LabSupports { get; set; } = null!;
+    }
 }

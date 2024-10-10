@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SWP.KitStem.API.Data;
 using SWP.KitStem.Repository.Models;
 using System;
 using System.Collections.Generic;
@@ -12,10 +13,10 @@ namespace SWP.KitStem.Repository;
 public class GenericRepository<TEntity>
     where TEntity : class
 {
-    internal KitStemContext context;
+    internal DataContext context;
     internal DbSet<TEntity> dbSet;
 
-    public GenericRepository(KitStemContext context)
+    public GenericRepository(DataContext context)
     {
         this.context = context;
         dbSet = context.Set<TEntity>();

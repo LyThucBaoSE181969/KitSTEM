@@ -28,4 +28,10 @@
     <ProjectReference Include="..\SWP.KitStem.Service\SWP.KitStem.Service.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+    <Folder Include="RequestModel\" />
+    <Folder Include="ResponseModel\" />
+  </ItemGroup>
+
 </Project>

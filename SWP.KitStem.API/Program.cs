@@ -2,10 +2,6 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using SWP.KitStem.Repository;
-using SWP.KitStem.Repository.Models;
-using SWP.KitStem.Service.Services;
 using SWP.KitStem.API.Data;
 
 namespace SWP.KitStem.API
@@ -16,7 +12,6 @@ namespace SWP.KitStem.API
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            var configuration = builder.Configuration;
             // Add services to the container.
 
             builder.Services.AddControllers();
@@ -25,15 +20,18 @@ namespace SWP.KitStem.API
             builder.Services.AddSwaggerGen();
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-            builder.Services.AddDbContext<KitStemContext>(options =>
-                options.UseSqlServer(connectionString));
+            //For Entity Framework
+            var configuration = builder.Configuration;
+
             builder.Services.AddDbContext<DataContext>(options =>
                 options.UseSqlServer(connectionString));
 
+            //For Identity
             builder.Services.AddIdentity<IdentityUser, IdentityRole>()
-                .AddEntityFrameworkStores<KitStemContext>()
+                .AddEntityFrameworkStores<DataContext>()
                 .AddDefaultTokenProviders();
 
+            //Adding Authentication
             builder.Services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -48,12 +46,12 @@ namespace SWP.KitStem.API
             //    option.AddPolicy("CORS", builder =>
             //        builder.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin()));
 
-            builder.Services.AddScoped<Order>();
-            builder.Services.AddScoped<CartService>();
-            builder.Services.AddScoped<LabService>();
-            builder.Services.AddScoped<KitService>();
-            builder.Services.AddScoped<CategoryService>();
-            builder.Services.AddScoped<UnitOfWork>();
+            //builder.Services.AddScoped<Order>();
+            //builder.Services.AddScoped<CartService>();
+            //builder.Services.AddScoped<LabService>();
+            //builder.Services.AddScoped<KitService>();
+            //builder.Services.AddScoped<CategoryService>();
+            //builder.Services.AddScoped<UnitOfWork>();
 
             var app = builder.Build();
 

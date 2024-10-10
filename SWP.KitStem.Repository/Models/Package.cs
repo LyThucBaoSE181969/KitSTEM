@@ -1,31 +1,39 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 
-namespace SWP.KitStem.Repository.Models;
-
-public partial class Package
+namespace SWP.KitStem.Repository.Models
 {
-    public int Id { get; set; }
+    [Table("Package")]
+    public class Package
+    {
+        [Key]
+        public int Id { get; set; }
+        public string Name { get; set; } = null!;
+        public int KitId { get; set; }
+        public int LevelId { get; set; }
+        [Required]
+        public int Price { get; set; }
+        public bool Status { get; set; }
 
-    public string Name { get; set; } = null!;
+        [ForeignKey("LevelId")]
+        public virtual Level Level { get; set; } = null!;
 
-    public int KitId { get; set; }
+        [ForeignKey("KitId")]
+        [InverseProperty("Packages")]
+        public virtual Kit Kit { get; set; } = null!;
 
-    public int LevelId { get; set; }
+        [JsonIgnore]
+        [InverseProperty("Package")]
+        public virtual ICollection<Cart> Carts { get; set; } = null!;
 
-    public int Price { get; set; }
-
-    public bool Status { get; set; }
-
-    public virtual ICollection<Cart> Carts { get; set; } = new List<Cart>();
-
-    public virtual Kit Kit { get; set; } = null!;
-
-    public virtual Level Level { get; set; } = null!;
-
-    public virtual ICollection<OrderSupport> OrderSupports { get; set; } = new List<OrderSupport>();
-
-    public virtual ICollection<PackageOrder> PackageOrders { get; set; } = new List<PackageOrder>();
-
-    public virtual ICollection<Lab> Labs { get; set; } = new List<Lab>();
+        [JsonIgnore]
+        [InverseProperty("Package")]
+        public virtual ICollection<PackageLab> PackageLabs { get; set; } = null!;
+    }
 }
