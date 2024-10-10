@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SWP.KitStem.API.Data;
+using SWP.KitStem.Service.BusinessModels;
+using SWP.KitStem.Service.Services;
 
 namespace SWP.KitStem.API
 {
@@ -31,6 +33,10 @@ namespace SWP.KitStem.API
                 .AddEntityFrameworkStores<DataContext>()
                 .AddDefaultTokenProviders();
 
+            //Add config for required email
+            builder.Services.Configure<IdentityOptions>(options =>
+                options.SignIn.RequireConfirmedEmail = true);
+
             //Adding Authentication
             builder.Services.AddAuthentication(options =>
             {
@@ -39,6 +45,13 @@ namespace SWP.KitStem.API
                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
             });
 
+            //Add Email Configs
+            var emailConfig = configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>();
+            builder.Services.AddSingleton(emailConfig);
+
+
+
+
             //builder.Services.AddDbContext<KitStemContext>(options =>
             //    options.UseSqlServer(connectionString,
             //        sqlOptions => sqlOptions.MigrationsAssembly("SWP.KitStem.Repository")));
@@ -46,6 +59,7 @@ namespace SWP.KitStem.API
             //    option.AddPolicy("CORS", builder =>
             //        builder.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin()));
 
+            builder.Services.AddScoped<IEmailService, EmailService>();
             //builder.Services.AddScoped<Order>();
             //builder.Services.AddScoped<CartService>();
             //builder.Services.AddScoped<LabService>();

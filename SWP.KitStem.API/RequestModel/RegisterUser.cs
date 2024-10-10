@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SWP.KitStem.Service.BusinessModels.Authentication.SignUp
+namespace SWP.KitStem.API.RequestModel
 {
     public class RegisterUser
     {

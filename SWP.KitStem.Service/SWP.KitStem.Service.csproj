@@ -17,16 +17,13 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.1" />
     <PackageReference Include="NETCore.MailKit" Version="2.1.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\SWP.KitStem.Repository\SWP.KitStem.Repository.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="BusinessModels\Authentication\Login\" />
-    <Folder Include="Services\" />
   </ItemGroup>
 
 </Project>

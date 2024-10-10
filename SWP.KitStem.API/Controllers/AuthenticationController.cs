@@ -1,10 +1,10 @@
-﻿using Azure;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using SWP.KitStem.Service.BusinessModels.Authentication.SignUp;
+using SWP.KitStem.API.RequestModel;
 using SWP.KitStem.API.ResponseModel;
-using Response = SWP.KitStem.API.ResponseModel.Response;
+using SWP.KitStem.Service.BusinessModels;
+using SWP.KitStem.Service.Services;
+
 
 
 namespace SWP.KitStem.API.Controllers
@@ -15,13 +15,13 @@ namespace SWP.KitStem.API.Controllers
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly IConfiguration _configuration;
+        private readonly IEmailService _emailService;
         public AuthenticationController(UserManager<IdentityUser> userManager,
-            RoleManager<IdentityRole> roleManager, IConfiguration configuration)
+            RoleManager<IdentityRole> roleManager, IEmailService emailService)
         {
             _userManager = userManager;
             _roleManager = roleManager;
-            _configuration = configuration;
+            _emailService = emailService;
         }
 
         [HttpPost]
@@ -53,8 +53,17 @@ namespace SWP.KitStem.API.Controllers
                 //Add role to the user
 
                 await _userManager.AddToRoleAsync(user, role);
+
+                //Add token to verify the email 
+                var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                var confirmationLink = Url.Action(nameof(ConfirmEmail),"Authentication",new { token, email = user.Email }, Request.Scheme);
+                var message = new Message([user.Email!], "Confirmation email link", confirmationLink!);
+                _emailService.SendEmail(message);
+
+
+
                 return StatusCode(StatusCodes.Status200OK,
-                    new Response { Status = "Success", Message = "User created successfully" });
+                    new Response { Status = "Success", Message = $"User created and sent to {user.Email} successfully" });
                 
             }
             else
@@ -62,12 +71,23 @@ namespace SWP.KitStem.API.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError,
                     new Response { Status = "Error", Message = "This role does not exist" });
             }
+        }
 
-
-
-            //Assign a role
-
-
+        [HttpGet("ConfirmedEmail")]
+        public async Task<IActionResult> ConfirmEmail(string token, string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user != null)
+            {
+                var result = await _userManager.ConfirmEmailAsync(user, token);
+                if (result.Succeeded)
+                {
+                    return StatusCode(StatusCodes.Status200OK,
+                        new Response { Status = "Success", Message = "Email verified successfully" });
+                }
+            }
+            return StatusCode(StatusCodes.Status500InternalServerError,
+                new Response { Status = "Error", Message = "This user does not exist!"});
         }
     }
 }
