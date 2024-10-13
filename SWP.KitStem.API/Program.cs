@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using SWP.KitStem.API.Data;
 using SWP.KitStem.Service.BusinessModels;
 using SWP.KitStem.Service.Services;
+using SWP.KitStem.Repository;
 
 namespace SWP.KitStem.API
 {
@@ -64,8 +65,8 @@ namespace SWP.KitStem.API
             //builder.Services.AddScoped<CartService>();
             //builder.Services.AddScoped<LabService>();
             //builder.Services.AddScoped<KitService>();
-            //builder.Services.AddScoped<CategoryService>();
-            //builder.Services.AddScoped<UnitOfWork>();
+            builder.Services.AddScoped<CategoryService>();
+            builder.Services.AddScoped<UnitOfWork>();
 
             var app = builder.Build();
 
