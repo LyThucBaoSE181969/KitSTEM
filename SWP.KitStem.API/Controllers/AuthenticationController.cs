@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using SWP.KitStem.API.RequestModel;
-using SWP.KitStem.API.ResponseModel;
+using SWP.KitStem.Service.BusinessModels.RequestModel;
+using SWP.KitStem.Service.BusinessModels.ResponseModel;
 using SWP.KitStem.Service.BusinessModels;
 using SWP.KitStem.Service.Services;
 

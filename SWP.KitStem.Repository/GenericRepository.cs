@@ -52,7 +52,13 @@ public class GenericRepository<TEntity>
 
     public virtual async Task<TEntity?> GetByIdAsync(object id) => await dbSet.FindAsync(id);
 
-    public virtual async Task InsertAsync(TEntity entity) => await dbSet.AddAsync(entity);
+    //public virtual async Task InsertAsync(TEntity entity) => await dbSet.AddAsync(entity);
+    
+    public virtual async Task<bool> InsertAsync(TEntity entity)
+    {
+        context.Add(entity);
+        return await context.SaveChangesAsync() > 0;
+    }
 
     public virtual void Delete(object id)
     {
