@@ -1,4 +1,5 @@
-﻿using SWP.KitStem.Repository;
+﻿using Microsoft.AspNetCore.Http;
+using SWP.KitStem.Repository;
 using SWP.KitStem.Service.BusinessModels;
 using SWP.KitStem.Service.Services.IService;
 
@@ -13,6 +14,32 @@ namespace SWP.KitStem.Service.Services
             _unitOfWork = unitOfWork;
         }
 
+        public async Task<ResponseService> GetCategoryByIdAsync(int id)
+        {
+            try
+            {
+                var categories = await _unitOfWork.Categories.GetByIdAsync(id);
+                if (categories == null)
+                {
+                    return new ResponseService()
+                    .SetSucceeded(true)
+                    .SetStatusCode(StatusCodes.Status404NotFound)
+                    .AddDetail("message", "Get kit fail")
+                    .AddError("error", "Cannot find kit");
+                }
+                return new ResponseService()
+                    .SetSucceeded(true)
+                    .AddDetail("data", new { categories });
+
+            }
+            catch
+            {
+                return new ResponseService()
+                    .SetSucceeded(false)
+                    .AddDetail("message", "Get kit fail")
+                    .AddError("error", "Cannot get kit");
+            }
+        }
         public async Task<ResponseService> GetCategoriesAsync()
         {
             try
@@ -32,5 +59,6 @@ namespace SWP.KitStem.Service.Services
             }
             
         }
+
     }
 }

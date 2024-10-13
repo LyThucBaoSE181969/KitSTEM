@@ -16,6 +16,18 @@ namespace SWP.KitStem.API.Controllers
             _categoryService = categoryService;
         }
 
+        [HttpGet("category/{id}")]
+        public async Task<IActionResult> GetCategory(int id)
+        {
+            var categories = await _categoryService.GetCategoryByIdAsync(id);
+            if (!categories.Succeeded)
+            {
+                return StatusCode(categories.StatusCode, new { status = categories.Status, details = categories.Details });
+            }
+
+            return Ok(new { status = categories.Status, details = categories.Details });
+        }
+
         [HttpGet("categories")]
         public async Task<IActionResult> GetCategories()
         {
@@ -27,5 +39,6 @@ namespace SWP.KitStem.API.Controllers
 
             return Ok(new { status = categories.Status, details = categories.Details });
         }
+        
     }
 }
