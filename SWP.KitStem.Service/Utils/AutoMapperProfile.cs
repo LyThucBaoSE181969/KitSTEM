@@ -58,14 +58,14 @@ namespace SWP.KitStem.Service.Utils
 
             // Using for Kit
 
-            //CreateMap<Kit, KitCreateDTO>().ReverseMap();
+            CreateMap<Kit, KitCreateRequest>().ReverseMap();
             CreateMap<Kit, KitModelResponse>()
                 .ForMember(dest => dest.KitsCategory, opt => opt.MapFrom(src => src.Category))
                 .ForMember(dest => dest.KitImages, opt => opt.MapFrom(src => src.KitImages));
             CreateMap<KitsCategory, CategoryModelRequest>();
             CreateMap<KitImage, KitImageRequest>();
             //// Using for KitImage
-            //CreateMap<KitImage, KitImageCreateDTO>().ReverseMap();
+            CreateMap<KitImage, KitImageCreateRequest>().ReverseMap();
 
             ////Using for Component
             //CreateMap<Component, ComponentDTO>().ReverseMap();

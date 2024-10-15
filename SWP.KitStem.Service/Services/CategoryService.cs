@@ -44,7 +44,7 @@ namespace SWP.KitStem.Service.Services
                     .AddError("outOfService", "Cannot delete!");
             }
         }
-        public async Task<ResponseService> UpdateCategoryAsync(UpdateCategoryRequest model)
+        public async Task<ResponseService> UpdateCategoryAsync(CategoryUpdateRequest model)
         {
             try
             {
@@ -69,7 +69,7 @@ namespace SWP.KitStem.Service.Services
                             .AddError("outOfService", "Cannot update");
             }
         }
-        public async Task<ResponseService> CreateCategoryAsync(CreateCategoryRequest model)
+        public async Task<ResponseService> CreateCategoryAsync(CategoryCreateRequest model)
         {
             try
             {
@@ -102,7 +102,7 @@ namespace SWP.KitStem.Service.Services
                 if (categories == null)
                 {
                     return new ResponseService()
-                    .SetSucceeded(true)
+                    .SetSucceeded(false)
                     .SetStatusCode(StatusCodes.Status404NotFound)
                     .AddDetail("message", "Get kit fail")
                     .AddError("error", "Cannot find kit");

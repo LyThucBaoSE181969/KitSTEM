@@ -28,7 +28,7 @@ namespace SWP.KitStem.API.Controllers
 
 
         [HttpPut("category/{id}")]
-        public async Task<IActionResult> UpdateCategory(UpdateCategoryRequest request)
+        public async Task<IActionResult> UpdateCategory(CategoryUpdateRequest request)
         {
             var category = await _categoryService.UpdateCategoryAsync(request);
             if (!category.Succeeded)
@@ -39,7 +39,7 @@ namespace SWP.KitStem.API.Controllers
         }
             
         [HttpPost("category")]
-        public async Task<IActionResult> CreateCategory(CreateCategoryRequest request)
+        public async Task<IActionResult> CreateCategory(CategoryCreateRequest request)
         {
             var category = await _categoryService.CreateCategoryAsync(request);
             if (!category.Succeeded)

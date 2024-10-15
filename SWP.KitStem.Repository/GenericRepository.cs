@@ -76,6 +76,13 @@ public class GenericRepository<TEntity>
         dbSet.Remove(entityToDelete);
     }
 
+    public virtual async Task<bool> RemoveAsync(TEntity entity)
+    {
+        context.Remove(entity);
+        await context.SaveChangesAsync();
+        return true;
+    }
+
     public virtual async Task<bool> Update(TEntity entityToUpdate)
     {
         var tracker = context.Attach(entityToUpdate);
@@ -155,5 +162,11 @@ public class GenericRepository<TEntity>
         int totalPages = (int)Math.Ceiling((double)totalRecords / take.Value);
 
         return totalPages;
+    }
+
+    public async Task<int> GetMaxIdAsync()
+    {
+        var maxId = await context.Kits.MaxAsync(k => k.Id);
+        return maxId;
     }
 }

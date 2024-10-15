@@ -13,6 +13,7 @@ public class UnitOfWork : IDisposable
     private DataContext _context;
     private GenericRepository<KitsCategory> _categories;
     private GenericRepository<Kit> _kits;
+    private GenericRepository<KitImage> _kitImage;
     private GenericRepository<Lab> _lab;
     private GenericRepository<Cart> _cart;     
     private GenericRepository<UserOrders> _order;
@@ -22,6 +23,17 @@ public class UnitOfWork : IDisposable
         _context = context;
     }
 
+    public GenericRepository<KitImage> KitImage
+    {
+        get
+        {
+            if (this._kitImage == null)
+            {
+                this._kitImage = new GenericRepository<KitImage>(_context);
+            }
+            return _kitImage;
+        }
+    }
     public GenericRepository<UserOrders> Orders
     {
         get
