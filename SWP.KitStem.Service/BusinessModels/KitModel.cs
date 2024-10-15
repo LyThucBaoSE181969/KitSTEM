@@ -25,7 +25,7 @@ namespace SWP.KitStem.Service.BusinessModels
         {
             return Status;
         }
-        //public KitsCategoryModel? Category { get; set; }
+        public CategoryModel? Category { get; set; }
 
         //public List<KitComponentModel>? KitComponents { get; set; }
 

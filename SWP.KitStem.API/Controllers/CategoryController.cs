@@ -1,6 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using SWP.KitStem.Service.BusinessModels;
+﻿using Microsoft.AspNetCore.Mvc;
+using SWP.KitStem.Service.BusinessModels.RequestModel;
 using SWP.KitStem.Service.Services;
 
 namespace SWP.KitStem.API.Controllers
@@ -16,6 +15,41 @@ namespace SWP.KitStem.API.Controllers
             _categoryService = categoryService;
         }
 
+        [HttpDelete("category/{id}")]
+        public async Task<IActionResult> DeleteCategory(int id)
+        {
+            var category = await _categoryService.DeleteByIdAsync(id);
+            if (!category.Succeeded)
+            {
+                return StatusCode(category.StatusCode, new { status = category.Status, details = category.Details });
+            }
+            return Ok(new { status = category.Status, details = category.Details });
+        }
+
+
+        [HttpPut("category/{id}")]
+        public async Task<IActionResult> UpdateCategory(UpdateCategoryRequest request)
+        {
+            var category = await _categoryService.UpdateCategoryAsync(request);
+            if (!category.Succeeded)
+            {
+                return StatusCode(category.StatusCode, new { status = category.Status, details = category.Details });
+            }
+            return Ok(new { status = category.Status, details = category.Details });
+        }
+            
+        [HttpPost("category")]
+        public async Task<IActionResult> CreateCategory(CreateCategoryRequest request)
+        {
+            var category = await _categoryService.CreateCategoryAsync(request);
+            if (!category.Succeeded)
+            {
+                return StatusCode(category.StatusCode, new { status = category.Status, details = category.Details });
+            }
+
+            return Ok(new { status = category.Status, details = category.Details });
+        }
+            
         [HttpGet("category/{id}")]
         public async Task<IActionResult> GetCategory(int id)
         {

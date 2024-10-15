@@ -1,4 +1,4 @@
-﻿namespace SWP.KitStem.API.ResponseModel
+﻿namespace SWP.KitStem.Service.BusinessModels.ResponseModel
 {
     public class Response
     {
