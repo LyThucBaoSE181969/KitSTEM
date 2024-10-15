@@ -76,10 +76,12 @@ public class GenericRepository<TEntity>
         dbSet.Remove(entityToDelete);
     }
 
-    public virtual void Update(TEntity entityToUpdate)
+    public virtual async Task<bool> Update(TEntity entityToUpdate)
     {
-        dbSet.Attach(entityToUpdate);
-        context.Entry(entityToUpdate).State = EntityState.Modified;
+        var tracker = context.Attach(entityToUpdate);
+        tracker.State = EntityState.Modified;
+
+        return await context.SaveChangesAsync() > 0;
     }
 
     public virtual async Task<bool> IsExist(object id)

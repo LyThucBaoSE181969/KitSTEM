@@ -13,9 +13,8 @@ namespace SWP.KitStem.Service.Services.IService
         Task<ResponseService> GetCategoriesAsync();
         Task<ResponseService> GetCategoryByIdAsync(int id);
         Task<ResponseService> CreateCategoryAsync(CreateCategoryRequest category);
-        //Task<ResponseService> UpdateAsync(CategoryUpdateDTO category);
-        //Task<ResponseService> RemoveByIdAsync(int id);
-        //Task<ResponseService> RestoreByIdAsync(int id);
+        Task<ResponseService> UpdateCategoryAsync(UpdateCategoryRequest category);
+        Task<ResponseService> DeleteByIdAsync(int id);
     }
 }
                                         
