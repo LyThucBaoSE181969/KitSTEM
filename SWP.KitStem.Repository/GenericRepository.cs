@@ -76,6 +76,13 @@ public class GenericRepository<TEntity>
         dbSet.Remove(entityToDelete);
     }
 
+    public virtual async Task<bool> RemoveAsync(TEntity entity)
+    {
+        context.Remove(entity);
+        await context.SaveChangesAsync();
+        return true;
+    }
+
     public virtual async Task<bool> Update(TEntity entityToUpdate)
     {
         var tracker = context.Attach(entityToUpdate);
@@ -87,5 +94,79 @@ public class GenericRepository<TEntity>
     public virtual async Task<bool> IsExist(object id)
     {
         return (await GetByIdAsync(id)) is not null;
+    }
+
+    public virtual async Task<(IEnumerable<TEntity>, int)> GetFilterAsync(
+             Expression<Func<TEntity, bool>>? filter = null,
+             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+             int? skip = null,
+             int? take = null,
+             params Func<IQueryable<TEntity>, IQueryable<TEntity>>[]? includes)
+    {
+        IQueryable<TEntity> query = dbSet;
+
+        if (includes != null)
+        {
+            foreach (var include in includes)
+            {
+                query = include(query);
+            }
+        }
+
+        // Apply the filter if provided
+        if (filter != null)
+        {
+            query = query.Where(filter);
+        }
+
+        // Apply ordering if provided
+        if (orderBy != null)
+        {
+            query = orderBy(query);
+        }
+
+        // Apply pagination: Skip and Take values
+        if (skip.HasValue)
+        {
+            query = query.Skip(skip.Value);
+        }
+
+        if (take.HasValue)
+        {
+            query = query.Take(take.Value);
+        }
+
+        return (await query.ToListAsync(), CountTotalPagesAsync(filter, take));
+    }
+        
+    private int CountTotalPagesAsync(Expression<Func<TEntity, bool>>? filter, int? take)
+    {
+        IQueryable<TEntity> query = dbSet;
+
+        // Apply the filter if provided
+        if (filter != null)
+        {
+            query = query.Where(filter);
+        }
+
+        // Count total number of records
+        int totalRecords = query.Count();
+
+        // Ensure 'take' has a value and is greater than 0, otherwise assume all records fit on one page
+        if (!take.HasValue || take.Value <= 0)
+        {
+            return 1; // If no 'take' value or invalid 'take', return 1 page
+        }
+
+        // Calculate total pages based on total records and take (items per page)
+        int totalPages = (int)Math.Ceiling((double)totalRecords / take.Value);
+
+        return totalPages;
+    }
+
+    public async Task<int> GetMaxIdAsync()
+    {
+        var maxId = await context.Kits.MaxAsync(k => k.Id);
+        return maxId;
     }
 }

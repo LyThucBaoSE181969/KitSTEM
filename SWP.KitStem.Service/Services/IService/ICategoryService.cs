@@ -1,10 +1,4 @@
-﻿using SWP.KitStem.Service.BusinessModels;
-using SWP.KitStem.Service.BusinessModels.RequestModel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SWP.KitStem.Service.BusinessModels.RequestModel;
 
 namespace SWP.KitStem.Service.Services.IService
 {
@@ -12,8 +6,8 @@ namespace SWP.KitStem.Service.Services.IService
     {
         Task<ResponseService> GetCategoriesAsync();
         Task<ResponseService> GetCategoryByIdAsync(int id);
-        Task<ResponseService> CreateCategoryAsync(CreateCategoryRequest category);
-        Task<ResponseService> UpdateCategoryAsync(UpdateCategoryRequest category);
+        Task<ResponseService> CreateCategoryAsync(CategoryCreateRequest category);
+        Task<ResponseService> UpdateCategoryAsync(CategoryUpdateRequest category);
         Task<ResponseService> DeleteByIdAsync(int id);
     }
 }

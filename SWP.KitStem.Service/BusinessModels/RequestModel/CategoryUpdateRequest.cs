@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SWP.KitStem.Service.BusinessModels.RequestModel
 {
-    public class UpdateCategoryRequest
+    public class CategoryUpdateRequest
     {
         [Required(ErrorMessage = "ID required!")]
         public int Id { get; set; }

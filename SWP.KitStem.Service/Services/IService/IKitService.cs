@@ -1,12 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SWP.KitStem.Service.BusinessModels.RequestModel;
 
 namespace SWP.KitStem.Service.Services.IService
 {
-    internal interface IKitService
+    public interface IKitService
     {
+        //Task<ResponseService> GetKitsAsync(KitModelRequest request);
+        Task<ResponseService> GetKitsAsync();
+        Task<ResponseService> GetKitByIdAsync(int id);
+        Task<ResponseService> CreateKitAsync(KitCreateRequest request);
+        Task<ResponseService> UpdateKitAsync(KitUpdateRequest request);
+        Task<ResponseService> DeleteKitAsync(int id);
+        Task<int> GetMaxIdAsync();
+
     }
 }

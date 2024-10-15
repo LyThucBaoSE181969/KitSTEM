@@ -6,6 +6,8 @@ using SWP.KitStem.API.Data;
 using SWP.KitStem.Service.BusinessModels;
 using SWP.KitStem.Service.Services;
 using SWP.KitStem.Repository;
+using SWP.KitStem.Service.Utils;
+using SWP.KitStem.Service.Services.IService;
 
 namespace SWP.KitStem.API
 {
@@ -64,9 +66,15 @@ namespace SWP.KitStem.API
             //builder.Services.AddScoped<Order>();
             //builder.Services.AddScoped<CartService>();
             //builder.Services.AddScoped<LabService>();
-            //builder.Services.AddScoped<KitService>();
+            builder.Services.AddScoped<LocalfileService>();
+            builder.Services.AddScoped<KitImageService>();
+            builder.Services.AddScoped<KitService>();
             builder.Services.AddScoped<CategoryService>();
             builder.Services.AddScoped<UnitOfWork>();
+
+            builder.Services.Configure<LocalfileSettings>(builder.Configuration.GetSection("LocalfileSettings"));
+
+            builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
             var app = builder.Build();
 
