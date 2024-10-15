@@ -30,11 +30,11 @@ namespace SWP.KitStem.Service.Services
                         .AddError("notFound", "Cannot found kit!");
                 }
                 
-                _unitOfWork.Categories.Delete(category);
+                _unitOfWork.Categories.Delete(category); 
                 await _unitOfWork.SaveAsync();
                 return new ResponseService()
                             .SetSucceeded(true)
-                            .AddDetail("message", "Xóa một loại kit thành công!");
+                            .AddDetail("message", "Delete complete!");
             }
             catch
             {
