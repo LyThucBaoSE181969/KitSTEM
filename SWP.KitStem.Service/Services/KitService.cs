@@ -49,7 +49,7 @@ namespace SWP.KitStem.Service.Services
                         .AddError("notFound", "Cannot found kit!");
                 }
                         
-                _unitOfWork.Categories.Delete(kit);
+                _unitOfWork.Kits.Delete(kit);
                 await _unitOfWork.SaveAsync();
                 return new ResponseService()
                             .SetSucceeded(true)

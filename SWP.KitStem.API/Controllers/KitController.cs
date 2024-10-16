@@ -33,28 +33,64 @@ namespace SWP.KitStem.API.Controllers
         //    return Ok(new { status = categories.Status, details = categories.Details });
         //}
 
-        [HttpGet("kits")]
-        public async Task<IActionResult> GetKits()
+        [HttpDelete("kit/{id}")]
+        public async Task<IActionResult> RemoveByIdAsync(int id)
         {
-            var categories = await _kitService.GetKitsAsync();
-            if (!categories.Succeeded)
-            {
-                return StatusCode(categories.StatusCode, new { status = categories.Status, details = categories.Details });
-            }
+            var serviceResponse = await _kitService.DeleteKitAsync(id);
+            if (!serviceResponse.Succeeded)
+                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
 
-            return Ok(new { status = categories.Status, details = categories.Details });
+            return Ok(new { status = serviceResponse.Status, detail = serviceResponse.Details });
         }
 
-        [HttpGet("kit/{id}")]
-        public async Task<IActionResult> GetKitById(int id)
-        {
-            var categories = await _kitService.GetKitByIdAsync(id);
-            if (!categories.Succeeded)
-            {
-                return StatusCode(categories.StatusCode, new { status = categories.Status, details = categories.Details });
-            }
 
-            return Ok(new { status = categories.Status, details = categories.Details });
+        [HttpPut("kit/{id}")]
+        public async Task<IActionResult> UpdateAsync([FromForm] KitUpdateRequest request)
+        {
+            var imageServiceResponse = await _kitImageService.RemoveImageAsync(request.Id);
+            if (!imageServiceResponse.Succeeded) return StatusCode(imageServiceResponse.StatusCode, new { status = imageServiceResponse.Status, details = imageServiceResponse.Details });
+
+            if (request.KitImagesList != null && request.KitImagesList.Any())
+            {
+                int kitImageCount = 1;
+                var nameFiles = new Dictionary<string, IFormFile>();
+                var imageIdList = new List<Guid>();
+
+                foreach (var image in request.KitImagesList)
+                {
+                    Guid imageIdTemp = Guid.NewGuid();
+                    imageIdList.Add(imageIdTemp);
+                    nameFiles.Add(imageIdTemp.ToString(), image);
+                    kitImageCount++;
+                }
+
+                var fileServiceResponse = await _localfileService.UploadFilesAsync(request.Id.ToString(), nameFiles);
+                if (!fileServiceResponse.Succeeded) return StatusCode(fileServiceResponse.StatusCode, new { status = fileServiceResponse.Status, details = fileServiceResponse.Details });
+                List<String>? urls = fileServiceResponse.Details!["urls"] as List<String>;
+                Guid imageId = Guid.Empty;
+
+                if (urls != null)
+                {
+                    for (int i = 0; i < (kitImageCount - 1); i++)
+                    {
+                        var url = urls.ElementAt(i);
+                        foreach (var GuidId in imageIdList)
+                        {
+                            if (url.Contains(GuidId.ToString())) imageId = GuidId;
+                        }
+                        imageServiceResponse = await _kitImageService.CreateImageAsync(imageId, request.Id, url);
+                        if (!imageServiceResponse.Succeeded) return StatusCode(imageServiceResponse.StatusCode, new { status = imageServiceResponse.Status, details = imageServiceResponse.Details });
+                    }
+                }
+
+            }
+            
+
+            var serviceResponse = await _kitService.UpdateKitAsync(request);
+            if (!serviceResponse.Succeeded)
+                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, detail = serviceResponse.Details });
+
+            return Ok(new { status = serviceResponse.Status, detail = serviceResponse.Details });
         }
 
         [HttpPost("Kit")]
@@ -79,7 +115,7 @@ namespace SWP.KitStem.API.Controllers
                 kitImageCount++;
             }
 
-            // Upload file cục bộ thay vì lên cloud
+
             var filesServiceResponse = await _localfileService.UploadFilesAsync(kitIdString, nameFiles);
 
             if (!filesServiceResponse.Succeeded)
@@ -107,6 +143,32 @@ namespace SWP.KitStem.API.Controllers
             }
             return Ok(new { status = serviceResponse.Status, detail = serviceResponse.Details });
         }
+
+        [HttpGet("kits")]
+        public async Task<IActionResult> GetKits()
+        {
+            var categories = await _kitService.GetKitsAsync();
+            if (!categories.Succeeded)
+            {
+                return StatusCode(categories.StatusCode, new { status = categories.Status, details = categories.Details });
+            }
+
+            return Ok(new { status = categories.Status, details = categories.Details });
+        }
+
+        [HttpGet("kit/{id}")]
+        public async Task<IActionResult> GetKitById(int id)
+        {
+            var categories = await _kitService.GetKitByIdAsync(id);
+            if (!categories.Succeeded)
+            {
+                return StatusCode(categories.StatusCode, new { status = categories.Status, details = categories.Details });
+            }
+
+            return Ok(new { status = categories.Status, details = categories.Details });
+        }
+
+        
     }
 }
     
