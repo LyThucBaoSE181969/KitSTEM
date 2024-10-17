@@ -12,7 +12,6 @@ namespace SWP.KitStem.Service.Services
 {
     public class KitService : IKitService
     {
-        private readonly int sizePerPage = 20;
         private readonly UnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 

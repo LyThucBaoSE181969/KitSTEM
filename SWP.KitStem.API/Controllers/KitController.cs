@@ -147,13 +147,13 @@ namespace SWP.KitStem.API.Controllers
         [HttpGet("kits")]
         public async Task<IActionResult> GetKits()
         {
-            var categories = await _kitService.GetKitsAsync();
-            if (!categories.Succeeded)
+            var kits = await _kitService.GetKitsAsync();
+            if (!kits.Succeeded)
             {
-                return StatusCode(categories.StatusCode, new { status = categories.Status, details = categories.Details });
+                return StatusCode(kits.StatusCode, new { status = kits.Status, details = kits.Details });
             }
 
-            return Ok(new { status = categories.Status, details = categories.Details });
+            return Ok(new { status = kits.Status, details = kits.Details });
         }
 
         [HttpGet("kit/{id}")]

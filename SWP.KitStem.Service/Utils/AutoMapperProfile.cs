@@ -34,9 +34,9 @@ namespace SWP.KitStem.Service.Utils
             //    .ForMember(dest => dest.PackageId, opt => opt.MapFrom(src => src.Id))
             //    .ForMember(dest => dest.Labs, opt => opt.MapFrom(src => src.PackageLabs)).ReverseMap();
 
-            //// Using for getting labs
-            //CreateMap<Lab, LabResponseDTO>();
-            //CreateMap<LabUploadDTO, Lab>();
+            // Using for getting labs
+            CreateMap<Lab, LabModelResponse>();
+            CreateMap<LabCreateRequest, Lab>();
 
             //// Using for getting KitComponents
             //CreateMap<KitComponent, KitComponentDTO>().ReverseMap();
