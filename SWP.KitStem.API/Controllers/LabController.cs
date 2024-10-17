@@ -19,24 +19,23 @@ namespace SWP.KitStem.API.Controllers
             _localfileService = localfileService;
         }
 
-        [HttpPut("lab")]
+        [HttpPut("update-lab")]
        
         public async Task<IActionResult> UpdateAsync([FromForm] LabUpdateRequest request)
         {
-            ResponseService serviceResponse;
+            
             string? url = null;
-            var nameFiles = new Dictionary<string, IFormFile>();
             if (request.File != null)
             {
-                serviceResponse = await _localfileService.UploadFilesAsync(request.Id.ToString(), nameFiles);
-                if (!serviceResponse.Succeeded)
+                var uploadResponse = await _localfileService.UploadFileAsync("labs", request.Id.ToString(), request.File!);
+                if (!uploadResponse.Succeeded)
                 {
-                    return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
+                    return StatusCode(uploadResponse.StatusCode, new { status = uploadResponse.Status, details = uploadResponse.Details });
                 }
-                url = serviceResponse.Details!["urls"].ToString();
+                url = uploadResponse.Details!["url"].ToString();
             }
 
-            serviceResponse = await _labService.UpdateLabsAsync(request, url);
+            var serviceResponse = await _labService.UpdateLabsAsync(request, url);
             if (!serviceResponse.Succeeded)
             {
                 return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
@@ -45,7 +44,7 @@ namespace SWP.KitStem.API.Controllers
             return Ok(new { status = serviceResponse.Status, details = serviceResponse.Details });
         }
 
-        [HttpDelete("lab")]
+        [HttpDelete("delete-lab")]
         public async Task<IActionResult> DeleteLab(Guid id)
         {
             var serviceResponse = await _labService.DeleteLabsAsync(id);
@@ -79,18 +78,19 @@ namespace SWP.KitStem.API.Controllers
             return Ok(new { status = labs.Status, details = labs.Details });
         }
 
-        [HttpPost("lab")]
+        [HttpPost("create-lab")]
         public async Task<IActionResult> CreateLabAsync([FromForm] LabCreateRequest request)
         {
             var labId = Guid.NewGuid();
-            var nameFiles = new Dictionary<string, IFormFile>();
-            var serviceResponse = await _localfileService.UploadFilesAsync(labId.ToString(), nameFiles);
+            var serviceResponse = await _localfileService.UploadFileAsync("labs", labId.ToString(), request.File!);
             if (!serviceResponse.Succeeded)
             {
                 return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
             }
 
-            var url = serviceResponse.Details!["urls"].ToString();
+            var url = serviceResponse.Details![ResponseService.ToKebabCase("url")].ToString();
+                
+
             serviceResponse = await _labService.CreateLabAsync(request, labId, url!);
             if (!serviceResponse.Succeeded)
             {
@@ -99,5 +99,37 @@ namespace SWP.KitStem.API.Controllers
 
             return CreatedAtAction(nameof(GetByIdAsync), new { id = labId }, new { status = serviceResponse.Status, details = serviceResponse.Details });
         }
+
+
+
+        [HttpGet("download-lab")]
+        public async Task <IActionResult> DownloadLabById(Guid id)
+        {
+            // Lấy thông tin URL và tên file từ LabService
+            var serviceResponse = await _labService.GetFileUrlByIdAsync(id);
+            if (!serviceResponse.Succeeded)
+            {
+                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
+            }
+
+            // Lấy URL và tên tệp từ phản hồi của service
+            var labUrl = serviceResponse.Details![ResponseService.ToKebabCase("url")].ToString();
+            var labName = serviceResponse.Details![ResponseService.ToKebabCase("fileName")].ToString();
+
+            // Tải tệp từ thư mục cục bộ
+            serviceResponse = await _localfileService.DownloadFileAsync(labUrl!);
+            if (!serviceResponse.Succeeded)
+            {
+                return StatusCode(serviceResponse.StatusCode, new { status = serviceResponse.Status, details = serviceResponse.Details });
+            }
+
+            // Lấy stream và kiểu nội dung (content type) từ phản hồi của LocalfileService
+            var stream = (MemoryStream)serviceResponse.Details![ResponseService.ToKebabCase("stream")];
+            var contentType = serviceResponse.Details![ResponseService.ToKebabCase("contentType")].ToString();
+
+            // Trả về tệp cho người dùng với tên file và kiểu nội dung
+            return File(stream, contentType!, labName);
+        }
     }
 }
+ 

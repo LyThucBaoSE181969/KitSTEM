@@ -23,6 +23,35 @@ namespace SWP.KitStem.Service.Services
             _mapper = mapper;
         }
 
+
+        public async Task<ResponseService> GetFileUrlByIdAsync(Guid id)
+        {
+            var serviceResponse = new ResponseService();
+            try
+            {
+                var lab = await _unitOfWork.Labs.GetByIdAsync(id);
+                if (lab == null)
+                {
+                    return serviceResponse
+                        .SetSucceeded(false)
+                        .SetStatusCode(StatusCodes.Status404NotFound)
+                        .AddDetail("message", "Retrieving lab information failed!")
+                        .AddError("notFound", "Lab not found");
+                }
+
+                return serviceResponse
+                            .SetSucceeded(true) 
+                            .AddDetail("url", lab.Url)
+                            .AddDetail("fileName", lab.Name);
+            }
+            catch
+            {
+                return serviceResponse
+                        .SetSucceeded(false)
+                        .AddDetail("message", "Retrieving lab information failed!")
+                        .AddError("outOfService", "Could not get current lab information or please check the information again!");
+            }
+        }
         public async Task<ResponseService> UpdateLabsAsync(LabUpdateRequest request, string? url)
         {
             try
@@ -72,20 +101,20 @@ namespace SWP.KitStem.Service.Services
                     return new ResponseService()
                         .SetSucceeded(false)
                         .SetStatusCode(StatusCodes.Status404NotFound)
-                        .AddDetail("message", "Delete fail")
+                        .AddDetail("message", "Delete failed")
                         .AddError("notFound", "Cannot found");
                 }
                 _unitOfWork.Labs.Delete(lab);
                 await _unitOfWork.SaveAsync();
                 return new ResponseService()
                     .SetSucceeded(true)
-                    .AddDetail("message", "Delete complete");
+                    .AddDetail("message", "Delete completed");
             }
             catch
             {
                 return new ResponseService()
                     .SetSucceeded(false)
-                    .AddDetail("message", "Delete fail!")
+                    .AddDetail("message", "Delete failed!")
                     .AddError("outOfService", "Cannot delete!");
             }
         }
