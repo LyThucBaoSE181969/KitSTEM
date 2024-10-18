@@ -15,7 +15,7 @@ namespace SWP.KitStem.API.Controllers
             _categoryService = categoryService;
         }
 
-        [HttpDelete("category/{id}")]
+        [HttpDelete("delete-category/{id}")]
         public async Task<IActionResult> DeleteCategory(int id)
         {
             var category = await _categoryService.DeleteByIdAsync(id);
@@ -27,7 +27,7 @@ namespace SWP.KitStem.API.Controllers
         }
 
 
-        [HttpPut("category/{id}")]
+        [HttpPut("update-category")]
         public async Task<IActionResult> UpdateCategory(CategoryUpdateRequest request)
         {
             var category = await _categoryService.UpdateCategoryAsync(request);
@@ -38,13 +38,14 @@ namespace SWP.KitStem.API.Controllers
             return Ok(new { status = category.Status, details = category.Details });
         }
             
-        [HttpPost("category")]
+        [HttpPost("create-category")]
         public async Task<IActionResult> CreateCategory(CategoryCreateRequest request)
         {
             var category = await _categoryService.CreateCategoryAsync(request);
             if (!category.Succeeded)
             {
-                return StatusCode(category.StatusCode, new { status = category.Status, details = category.Details });
+                return StatusCode(category.StatusCode, 
+                    new { status = category.Status, details = category.Details });
             }
 
             return Ok(new { status = category.Status, details = category.Details });
