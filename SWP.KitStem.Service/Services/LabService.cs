@@ -4,12 +4,6 @@ using SWP.KitStem.Repository;
 using SWP.KitStem.Repository.Models;
 using SWP.KitStem.Service.BusinessModels.RequestModel;
 using SWP.KitStem.Service.BusinessModels.ResponseModel;
-using SWP.KitStem.Service.Services.IService;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SWP.KitStem.Service.Services
 {

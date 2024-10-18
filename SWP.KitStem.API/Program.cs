@@ -7,7 +7,6 @@ using SWP.KitStem.Service.BusinessModels;
 using SWP.KitStem.Service.Services;
 using SWP.KitStem.Repository;
 using SWP.KitStem.Service.Utils;
-using SWP.KitStem.Service.Services.IService;
 
 namespace SWP.KitStem.API
 {
@@ -65,6 +64,7 @@ namespace SWP.KitStem.API
             builder.Services.AddScoped<IEmailService, EmailService>();
             //builder.Services.AddScoped<Order>();
             //builder.Services.AddScoped<CartService>();
+            builder.Services.AddScoped<LevelService>();
             builder.Services.AddScoped<LabService>();
             builder.Services.AddScoped<LocalfileService>();
             builder.Services.AddScoped<KitImageService>();

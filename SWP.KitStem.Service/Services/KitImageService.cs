@@ -1,12 +1,11 @@
 ﻿using AutoMapper;
 using SWP.KitStem.Repository;
 using SWP.KitStem.Repository.Models;
-using SWP.KitStem.Service.Services.IService;
 using System.Linq.Expressions;
 
 namespace SWP.KitStem.Service.Services
 {
-    public class KitImageService : IKitImageService
+    public class KitImageService 
     {
         private readonly IMapper _mapper;
         private readonly UnitOfWork _unitOfWork;

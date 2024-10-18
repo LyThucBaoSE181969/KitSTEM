@@ -1,16 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
-using SWP.KitStem.Service.Services.IService;
 using SWP.KitStem.Service.Utils;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace SWP.KitStem.Service.Services
 {
-    public class LocalfileService : ILocalfileService
+    public class LocalfileService 
     {
         private readonly string _localFolderPath;
 

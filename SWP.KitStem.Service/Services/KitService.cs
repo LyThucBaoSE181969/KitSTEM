@@ -1,16 +1,12 @@
 ﻿using AutoMapper;
 using SWP.KitStem.Repository;
 using SWP.KitStem.Repository.Models;
-using SWP.KitStem.Service.Services.IService;
-using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
 using SWP.KitStem.Service.BusinessModels.RequestModel;
-using SWP.KitStem.Service.BusinessModels.ResponseModel;
 using Microsoft.AspNetCore.Http;
 
 namespace SWP.KitStem.Service.Services
 {
-    public class KitService : IKitService
+    public class KitService 
     {
         private readonly UnitOfWork _unitOfWork;
         private readonly IMapper _mapper;

@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SWP.KitStem.Service.BusinessModels.RequestModel;
 using SWP.KitStem.Service.Services;
-using SWP.KitStem.Service.Services.IService;
 
 namespace SWP.KitStem.API.Controllers
 {
@@ -19,7 +17,7 @@ namespace SWP.KitStem.API.Controllers
             _kitService = kitService;
             _kitImageService = kitImageService;
             _localfileService = localfileService;
-        }
+        } 
 
         //[HttpGet("kits")]
         //public async Task<IActionResult> GetKits([FromQuery] KitModelRequest request)

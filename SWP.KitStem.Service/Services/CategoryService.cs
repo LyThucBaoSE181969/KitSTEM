@@ -1,13 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
 using SWP.KitStem.Repository;
 using SWP.KitStem.Repository.Models;
-using SWP.KitStem.Service.BusinessModels;
 using SWP.KitStem.Service.BusinessModels.RequestModel;
-using SWP.KitStem.Service.Services.IService;
 
 namespace SWP.KitStem.Service.Services
 {
-    public class CategoryService : ICategoryService
+    public class CategoryService 
     {
         private readonly UnitOfWork _unitOfWork;
 
@@ -105,7 +103,7 @@ namespace SWP.KitStem.Service.Services
                     .SetSucceeded(false)
                     .SetStatusCode(StatusCodes.Status404NotFound)
                     .AddDetail("message", "Get kit fail")
-                    .AddError("error", "Cannot find kit");
+                    .AddError("error", "Cannot found kit");
                 }
                 return new ResponseService()
                     .SetSucceeded(true)
@@ -127,14 +125,14 @@ namespace SWP.KitStem.Service.Services
                 var categories = await _unitOfWork.Categories.GetAsync();
                 return new ResponseService()
                     .SetSucceeded(true)
-                    .AddDetail("message", "Get kits success")   
+                    .AddDetail("message", "Get kits successed")   
                     .AddDetail("data", new { categories });
             }
             catch
             {
                 return new ResponseService()
                     .SetSucceeded(false)
-                    .AddDetail("message", "Get kits fail")
+                    .AddDetail("message", "Get kits failed")
                     .AddError("error", "Cannot get kits");
             }
             
