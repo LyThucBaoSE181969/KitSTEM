@@ -68,7 +68,7 @@ namespace SWP.KitStem.Service.Utils
             CreateMap<KitImage, KitImageCreateRequest>().ReverseMap();
 
             ////Using for Component
-            //CreateMap<Component, ComponentDTO>().ReverseMap();
+            CreateMap<Component, ComponentModelRequest>().ReverseMap();
 
         }
     }

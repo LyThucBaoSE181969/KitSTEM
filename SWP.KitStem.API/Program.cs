@@ -64,6 +64,7 @@ namespace SWP.KitStem.API
             builder.Services.AddScoped<IEmailService, EmailService>();
             //builder.Services.AddScoped<Order>();
             //builder.Services.AddScoped<CartService>();
+            builder.Services.AddScoped<ComponentService>();
             builder.Services.AddScoped<LevelService>();
             builder.Services.AddScoped<LabService>();
             builder.Services.AddScoped<LocalfileService>();

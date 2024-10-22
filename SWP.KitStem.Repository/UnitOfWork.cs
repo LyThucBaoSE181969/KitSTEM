@@ -18,10 +18,23 @@ public class UnitOfWork : IDisposable
     private GenericRepository<Level> _level;
     private GenericRepository<Cart> _cart;     
     private GenericRepository<UserOrders> _order;
+    private GenericRepository<Component> _component;
                                                 
     public UnitOfWork(DataContext context)
     {
         _context = context;
+    }
+
+    public GenericRepository<Component> Components
+    {
+        get
+        {
+            if (this._component == null)
+            {
+                this._component = new GenericRepository<Component>(_context);
+            }
+            return _component;
+        }
     }
 
     public GenericRepository<Level> Levels

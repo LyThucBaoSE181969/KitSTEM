@@ -48,7 +48,7 @@ namespace SWP.KitStem.API.Controllers
                     new { status = category.Status, details = category.Details });
             }
 
-            return Ok(new { status = category.Status, details = category.Details });
+            return Ok(new { status = category.Status, details = category.Details });                    
         }
             
         [HttpGet("category/{id}")]

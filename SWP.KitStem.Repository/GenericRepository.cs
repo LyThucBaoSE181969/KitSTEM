@@ -50,6 +50,11 @@ public class GenericRepository<TEntity>
         }
     }
 
+    public virtual async Task<List<TEntity>> GetAllAsync()
+    {
+        return await context.Set<TEntity>().ToListAsync();
+    }
+
     public virtual async Task<TEntity?> GetByIdAsync(object id) => await dbSet.FindAsync(id);
 
     //public virtual async Task InsertAsync(TEntity entity) => await dbSet.AddAsync(entity);
